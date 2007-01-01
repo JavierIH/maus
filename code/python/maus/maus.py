@@ -25,7 +25,7 @@ class Maus(object):
 
         self.control = ServoController(self._bus, self._pca9685_address)
         self.sensor = Inclinometer(self._bus, self._bno055_address)
-        self.sensor.pitch_trim=-8.5
+        self.sensor.pitch_trim=0
 
         #Setting up OctoSnake
         self.osc = []
@@ -53,16 +53,16 @@ class Maus(object):
 
     def walk(self, steps):
 
-        left_x_amp = 20		#millimeters
-        right_x_amp = 20	#millimeters
-        z_amp = 30		#millimeters
-        swing_amp = 70		#degrees
-        T = 900                 #milliseconds 
+        left_x_amp = 20#20		#millimeters
+        right_x_amp = 20#20	#millimeters
+        z_amp = 20		#millimeters
+        swing_amp = 90		#degrees
+        T = 800                 #milliseconds 
 
         period = [T, T, T, T, T]
         amplitude = [left_x_amp, z_amp, right_x_amp, z_amp, swing_amp]
-        offset = [-10, -75, -10, -75, 0]
-        phase = [90, 180, 270, 0, 335+90]
+        offset = [-30, -75, -30, -75, 0]
+        phase = [270, 0, 90, 180, 280]
 
         for i in range(len(self.osc)):
             self.osc[i].period = period[i]
@@ -77,13 +77,14 @@ class Maus(object):
                 for i in range(len(self.osc)):
                     self.osc[i].refresh()
 
-                left_joints = self.ik.getJoints(self.osc[0].output, 0, self.osc[1].output-roll_data/7)
-                right_joints = self.ik.getJoints(self.osc[2].output, 0, self.osc[3].output+roll_data/7)
+                left_joints = self.ik.getJoints(self.osc[0].output, 0, self.osc[1].output)#-roll_data/7)
+                right_joints = self.ik.getJoints(self.osc[2].output, 0, self.osc[3].output)#+roll_data/7)
                 self.control.move(self._servo_pins[0], left_joints[0])
                 self.control.move(self._servo_pins[1], right_joints[0])
                 self.control.move(self._servo_pins[2], left_joints[1])
                 self.control.move(self._servo_pins[3], right_joints[1])
-                self.control.move(self._servo_pins[4], self.osc[4].output-0.5*roll_data)
+                self.control.move(self._servo_pins[4], self.osc[4].output+0.5*roll_data)
+		print(roll_data);
 
             except IOError:
                 self._bus = smbus.SMBus(self._i2c_bus)
