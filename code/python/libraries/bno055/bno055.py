@@ -12,7 +12,10 @@ class Inclinometer:
         self.bus.write_byte_data(self.address, 0x3f, 0x20) #reset
         time.sleep(0.1)
         self.wait_bus()
-        self.bus.write_byte_data(self.address, 0x3e, 0x00) #power mode normal               
+        self.bus.write_byte_data(self.address, 0x3e, 0x00) #power mode normal
+	if self.bus.read_byte_data(self.address, 0x3e) != 0:
+            print 'a tomar por...'
+               
         self.bus.write_byte_data(self.address, 0x3d, 0x0c) #mode ndof
      
     def get_pitch(self):
@@ -30,7 +33,7 @@ class Inclinometer:
     def raw_to_degrees(self, input):
 	if input > 65535/2:
             input -= 65535
-        out = float(input)*90/1450
+        out = float(input)*90/1440
         return out
 
     def wait_bus(self):
