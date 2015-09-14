@@ -1,7 +1,7 @@
 import time 
-import octosnake
+import libraries.octosnake.octosnake as octosnake
 import smbus
-from pca9865 import Servo_controller
+from libraries.pca9865.pca9865 import Servo_controller
 
 #Caminata estatica
 AMP=25
