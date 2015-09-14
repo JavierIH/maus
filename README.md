@@ -8,9 +8,9 @@
 
 # MAUS
 
-MAUS is an experimental biped walker with PLM legs. The main controller of this robot is an Arietta G25 Linux SBC. Main code for locomotion and gaits is written in Python using oscillators algortihms.
+MAUS is an experimental biped walker with PLM legs. The main controller of this robot is an Arietta G25 Linux SBC. Main code for locomotion and gaits is written in Python using oscillator algorithms.
 
-<img src="doc/images/maus.jpg" width="300" align="center"> 
+<img src="doc/images/maus.jpg" width="600" align="center"> 
 
 # License 
 
