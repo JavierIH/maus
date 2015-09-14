@@ -1,10 +1,10 @@
 import time 
-import octosnake
+import libraries.octosnake.octosnake as octosnake
 import smbus
-from pca9865 import Servo_controller
+from libraries.pca9865.pca9865 import Servo_controller
 
 #Caminata estatica
-AMP=25
+AMP=20
 servo1 = octosnake.Oscillator(1600, AMP, 0, -45, -15)
 servo2 = octosnake.Oscillator(1600, AMP, 0, 45, 8)
 servo3 = octosnake.Oscillator(1600, AMP, 90, 30, 0)
