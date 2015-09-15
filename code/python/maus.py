@@ -3,13 +3,22 @@ import libraries.octosnake.octosnake as octosnake
 import smbus
 from libraries.pca9865.pca9865 import Servo_controller
 
+
 #Caminata estatica
-AMP=20
-servo1 = octosnake.Oscillator(1600, AMP, 0, -45, -15)
-servo2 = octosnake.Oscillator(1600, AMP, 0, 45, 8)
-servo3 = octosnake.Oscillator(1600, AMP, 90, 30, 0)
-servo4 = octosnake.Oscillator(1600, AMP, 90, -30, -18)
-servo5 = octosnake.Oscillator(1600, 110, 180, 0, 21)
+#AMP=20
+#servo1 = octosnake.Oscillator(1600, AMP, 0, -45, -15)
+#servo2 = octosnake.Oscillator(1600, AMP, 0, 45, 8)
+#servo3 = octosnake.Oscillator(1600, AMP, 90, 30, 0)
+#servo4 = octosnake.Oscillator(1600, AMP, 90, -30, -18)
+#servo5 = octosnake.Oscillator(1600, 110, 180, 0, 21)
+
+#Caminata dinamica
+AMP=25
+servo1 = octosnake.Oscillator(800, AMP, 0, -60, -15)
+servo2 = octosnake.Oscillator(800, AMP, 0, 60, 8)
+servo3 = octosnake.Oscillator(800, AMP, 90, 30, 0)
+servo4 = octosnake.Oscillator(800, AMP, 90, -30, -18)
+servo5 = octosnake.Oscillator(800, 60, 220, 0, 21)
 
 
 
@@ -44,9 +53,9 @@ def test():
 			control.move(4, position5)
 		except IOError:
 			bus = smbus.SMBus(0)
-			print '\n'*8, '------------- I2C reiniciado -------------'
+			#print '\n'*8, '------------- I2C reiniciado -------------'
 
-		print 'Servo 1:  ' + str(position1) + '    \t Servo 2: ' + str(position2) + '    \t Servo 3: ' + str(position3) + '    \t Servo 4: '  + str(position4)
+		#print 'Servo 1:  ' + str(position1) + '    \t Servo 2: ' + str(position2) + '    \t Servo 3: ' + str(position3) + '    \t Servo 4: '  + str(position4)
 		#time.sleep(0.1)
 
 
