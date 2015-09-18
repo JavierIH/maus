@@ -1,6 +1,3 @@
-PCA9685_MODE1 = 0x00
-PCA9685_PRESCALE = 0xFE
-
 class Servo_controller:
 
     def __init__(self, bus, address, servo_min=150, servo_max=550, servo_amp=180):
@@ -22,9 +19,8 @@ class Servo_controller:
         self.bus.write_byte_data(self.address, id*4+6, 0)
         self.bus.write_byte_data(self.address, id*4+7, 0)
         self.bus.write_byte_data(self.address, id*4+8, position)
-        self.bus.write_byte_data(self.address, id*4+9, position>>8)
+        self.bus.write_byte_data(self.address, id*4+9, position >> 8)
 	
     def sleep(self):
 	self.bus.write_byte_data(self.address, 0x00, 0x10)
         self.bus.write_byte_data(self.address, 0x00, 0x00)
-
