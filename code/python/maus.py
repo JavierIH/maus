@@ -1,7 +1,7 @@
-import time 
+import time
 import libraries.octosnake.octosnake as octosnake
 import smbus
-from libraries.pca9865.pca9865 import Servo_controller
+from libraries.pca9865.pca9865 import ServoController
 from libraries.bno055.bno055 import Inclinometer
 
 #AMP=25
@@ -11,18 +11,30 @@ from libraries.bno055.bno055 import Inclinometer
 #servo4 = octosnake.Oscillator(1600, AMP, 90, -30, -18)
 #servo5 = octosnake.Oscillator(1600, 110, 180, 0, 21)
 
+#AMP=25
+#T=1000
+#servo1 = octosnake.Oscillator(T, AMP, 0, -60, -15)
+#servo2 = octosnake.Oscillator(T, AMP, 0, 60, 8)
+#servo3 = octosnake.Oscillator(T, AMP, 90, 30, 0)
+#servo4 = octosnake.Oscillator(T, AMP, 90, -30, -18)
+#servo5 = octosnake.Oscillator(T, 60, 220, 0, 21)
+
 AMP=25
 T=1000
-servo1 = octosnake.Oscillator(T, AMP, 0, -60, -15)
-servo2 = octosnake.Oscillator(T, AMP, 0, 60, 8)
-servo3 = octosnake.Oscillator(T, AMP, 90, 30, 0)
-servo4 = octosnake.Oscillator(T, AMP, 90, -30, -18)
-servo5 = octosnake.Oscillator(T, 60, 220, 0, 21)
+ajuste = 0
 
-servo2.ref_time = servo1.ref_time
-servo3.ref_time = servo1.ref_time
-servo4.ref_time = servo1.ref_time
-servo5.ref_time = servo1.ref_time
+osc=[] 
+
+osc.append(octosnake.Oscillator(T, AMP-ajuste, 0, -60))
+osc.append(octosnake.Oscillator(T, AMP-ajuste, 0, 60))
+osc.append(octosnake.Oscillator(T, AMP+ajuste, 90, 30))
+osc.append(octosnake.Oscillator(T, AMP+ajuste, 90, -30))
+osc.append(octosnake.Oscillator(T, 60, 190, 0))
+
+osc[1].ref_time = osc[0].ref_time
+osc[2].ref_time = osc[0].ref_time
+osc[3].ref_time = osc[0].ref_time
+osc[4].ref_time = osc[0].ref_time
 
 bus = smbus.SMBus(0)
 
@@ -32,26 +44,28 @@ bno055_address = 0x29
 if not bus:
     raise Exception('I2C bus connection failed!')
 
-control=Servo_controller(bus, pca9865_address)
+control=ServoController(bus, pca9865_address)
 sensor=Inclinometer(bus, bno055_address)
+
+control.addServo(8, -12)
+control.addServo(9, 8)
+control.addServo(10, 0)
+control.addServo(11, -18)
+control.addServo(4, 21)
 
 def test():
 	ref=time.time()
 	while True:
-		position1 = servo1.refresh()
-                position2 = servo2.refresh()
-                position3 = servo3.refresh()
-		position4 = servo4.refresh()
-		position5 = servo5.refresh()
-
+		for i in range(len(osc)):
+                    osc[i].refresh()
+                
  		try:
                         roll_data = sensor.get_roll()
-                        pitch_data = 0#sensor.get_pitch()
-			control.move(8, position1 - roll_data/2 - pitch_data)
-			control.move(9, position2 - roll_data/2 + pitch_data)
-			control.move(10, position3 + roll_data/2 - pitch_data)
-                	control.move(11, position4 + roll_data/2 + pitch_data)
-			control.move(4, position5 - roll_data*3)
+			control.move(8, osc[0].output - roll_data/2)
+			control.move(9, osc[1].output - roll_data/2)
+			control.move(10, osc[2].output + roll_data/2)
+                	control.move(11, osc[3].output + roll_data/2)
+			control.move(4, osc[4].output)# - roll_data*3)
                         #print roll_data, '\t', pitch_data
 		except IOError:
 			bus = smbus.SMBus(0)

@@ -1,6 +1,6 @@
 import time
 
-class Inclinometer:
+class Inclinometer(object):
 
     def __init__(self, bus, address):
         
@@ -14,7 +14,7 @@ class Inclinometer:
         self.wait_bus()
         self.bus.write_byte_data(self.address, 0x3e, 0x00) #power mode normal
 	if self.bus.read_byte_data(self.address, 0x3e) != 0:
-            print 'a tomar por...'
+            print 'ERROR!'
                
         self.bus.write_byte_data(self.address, 0x3d, 0x0c) #mode ndof
      

@@ -12,7 +12,5 @@ if not bus:
 sensor=Inclinometer(bus, device_address)
 
 while True:
-    print 'Pitch: ', sensor.get_pitch()
-    print 'Roll: ', sensor.get_roll()     
-    print 'Yaw: ', sensor.get_yaw()     
+    print 'Pitch: ', sensor.get_pitch(), '\tRoll: ', sensor.get_roll(), '\tYaw: ', sensor.get_yaw()     
     time.sleep(0.1)
