@@ -21,11 +21,20 @@ class ServoController(object):
 	self._write(id, register_value)
 	self.servos[id].current_position=target_position
 
+    def getPosition(self, id):
+	register_value = self._read(id)
+        return (register_value - self.servo_zero)/self.servo_inc - self.servos[id].trim 
+
     def _write(self, id, register_value):
         self.bus.write_byte_data(self.address, id*4+6, 0)
         self.bus.write_byte_data(self.address, id*4+7, 0)
         self.bus.write_byte_data(self.address, id*4+8, register_value)
         self.bus.write_byte_data(self.address, id*4+9, register_value >> 8)
+
+    def _read(self, id):
+        register_value = self.bus.read_byte_data(self.address, id*4+8)
+        register_value += self.bus.read_byte_data(self.address, id*4+9) << 8
+        return register_value
 	
     def sleep(self):
 	self.bus.write_byte_data(self.address, 0x00, 0x10)

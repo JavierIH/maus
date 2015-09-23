@@ -17,9 +17,11 @@ control.addServo(servo_id, servo_trim)
 
 while True:
     control.move(servo_id, 20)
+    print 'Envio 20, lectura: ', control.getPosition(servo_id)
     time.sleep(3)
 
     control.move(servo_id, -20)
+    print 'Envio -20, lectura: ', control.getPosition(servo_id)
     time.sleep(3)
 
 

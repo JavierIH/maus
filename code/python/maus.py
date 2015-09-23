@@ -25,10 +25,10 @@ ajuste = 0
 
 osc=[] 
 
-osc.append(octosnake.Oscillator(T, AMP-ajuste, 0, -60))
-osc.append(octosnake.Oscillator(T, AMP-ajuste, 0, 60))
-osc.append(octosnake.Oscillator(T, AMP+ajuste, 90, 30))
-osc.append(octosnake.Oscillator(T, AMP+ajuste, 90, -30))
+osc.append(octosnake.Oscillator(T, AMP, 0, -60))
+osc.append(octosnake.Oscillator(T, AMP, 0, 60))
+osc.append(octosnake.Oscillator(T, AMP, 90, 30))
+osc.append(octosnake.Oscillator(T, AMP, 180, -30))
 osc.append(octosnake.Oscillator(T, 60, 190, 0))
 
 osc[1].ref_time = osc[0].ref_time
@@ -47,7 +47,7 @@ if not bus:
 control=ServoController(bus, pca9865_address)
 sensor=Inclinometer(bus, bno055_address)
 
-control.addServo(8, -12)
+control.addServo(8, -15)
 control.addServo(9, 8)
 control.addServo(10, 0)
 control.addServo(11, -18)
@@ -60,7 +60,7 @@ def test():
                     osc[i].refresh()
                 
  		try:
-                        roll_data = sensor.get_roll()
+                        roll_data = 0#sensor.get_roll()
 			control.move(8, osc[0].output - roll_data/2)
 			control.move(9, osc[1].output - roll_data/2)
 			control.move(10, osc[2].output + roll_data/2)
@@ -74,4 +74,4 @@ def test():
 		#print 'Servo 1:  ' + str(position1) + '    \t Servo 2: ' + str(position2) + '    \t Servo 3: ' + str(position3) + '    \t Servo 4: '  + str(position4)
 		#time.sleep(1)
 
-test()
+#test()
