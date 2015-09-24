@@ -17,6 +17,7 @@ class ServoController(object):
 
     def move(self, id, target_position):
 	trim = self.servos[id].trim
+        target_position = target_position * (-2*self.servos[id].reverse + 1)
         register_value = int(self.servo_zero+(target_position + trim)*self.servo_inc)
 	self._write(id, register_value)
 	self.servos[id].current_position=target_position
@@ -50,3 +51,4 @@ class Servo(object):
         self.id = id
         self.trim = trim
 	self.current_position=0
+	self.reverse = False

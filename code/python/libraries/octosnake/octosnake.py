@@ -10,13 +10,12 @@ class Oscillator(object):
 		self.phase = phase
 		self.offset = offset
 		self.stop = False
-		self.reverse = False
 		self.ref_time = time.time()*1000
 		self.delta_time=0
 	
 	def refresh(self):
 		self.delta_time=(time.time()*1000-self.ref_time*1000)%self.period
-		self.output = (self.amplitude * self.wave(self.time_to_radians(self.delta_time) + self.degrees_to_radians(self.phase)) + self.offset) * (-2*self.reverse + 1)
+		self.output = (self.amplitude * self.wave(self.time_to_radians(self.delta_time) + self.degrees_to_radians(self.phase)) + self.offset)
 		return self.output
 
 	def reset(self):
