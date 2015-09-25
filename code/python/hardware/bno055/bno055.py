@@ -11,7 +11,7 @@ class Inclinometer(object):
 	self.bus.write_byte_data(self.address, 0x3d, 0x00) #configuration mode
         self.bus.write_byte_data(self.address, 0x3f, 0x20) #reset
         time.sleep(0.1)
-        self.wait_bus()
+        self.waitBus()
         self.bus.write_byte_data(self.address, 0x3e, 0x00) #power mode normal
 	if self.bus.read_byte_data(self.address, 0x3e) != 0:
             print 'ERROR!'
@@ -22,7 +22,7 @@ class Inclinometer(object):
         out = self.bus.read_word_data(self.address, 0x1e)
 	return self.raw2deg(out)
 
-    def getPoll(self):
+    def getRoll(self):
 	out = self.bus.read_word_data(self.address, 0x1c)
 	return self.raw2deg(out)   
 
@@ -42,4 +42,4 @@ class Inclinometer(object):
 	except IOError:
             print 'waiting...'
             time.sleep(0.5)
-            self.wait_bus()
+            self.waitBus()
