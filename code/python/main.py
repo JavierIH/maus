@@ -1,9 +1,9 @@
 import time
-import libraries.octosnake.octosnake as octosnake
 import smbus
 from libraries.pca9865.pca9865 import ServoController
 from libraries.bno055.bno055 import Inclinometer
-from libraries.kinematics.kinematics import MausKinematics
+from control.kinematics.kinematics import MausKinematics
+import control.octosnake.octosnake as octosnake
 
 osc = []
 xamp_left = 10 
@@ -50,7 +50,7 @@ control.servos[11].reverse = True
 def test():
     #var_phase = 250
     while True:
-	roll=sensor.get_roll()
+	roll=sensor.getRoll()
         for i in range(len(osc)):
             osc[i].refresh()
         try:
@@ -60,7 +60,7 @@ def test():
             control.move(10, left_joints[1])
             control.move(9, right_joints[0])
             control.move(11, right_joints[1])
-            control.move(4, osc[4].output - 0.5*sensor.get_roll())
+            control.move(4, osc[4].output - 0.5*sensor.getRoll())
             
             #var_phase+=0.1
             #osc[4].phase=var_phase
