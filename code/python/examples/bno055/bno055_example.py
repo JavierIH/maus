@@ -1,5 +1,9 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__).replace('examples/bno055','')))
+
 import smbus
-from bno055 import Inclinometer
+from hardware.bno055.bno055 import Inclinometer
 import time
 
 bus = smbus.SMBus(0)
@@ -12,5 +16,5 @@ if not bus:
 sensor=Inclinometer(bus, device_address)
 
 while True:
-    print 'Pitch: ', sensor.get_pitch(), '\tRoll: ', sensor.get_roll(), '\tYaw: ', sensor.get_yaw()     
+    print 'Pitch: ', sensor.getPitch(), '\tRoll: ', sensor.getRoll(), '\tYaw: ', sensor.getYaw()     
     time.sleep(0.1)
