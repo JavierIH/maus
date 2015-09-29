@@ -49,26 +49,28 @@ class Maus(object):
         self.control.servos[self._servo_pins[1]].reverse = True
         self.control.servos[self._servo_pins[3]].reverse = True
 
-    def run(self):
+
+    def run(self, steps):
+
         left_x_amp = 10		#millimeters
         right_x_amp = 20	#millimeters
         z_amp = 30		#millimeters
         swing_amp = 70		#degrees
-        T = 1000		#milliseconds
+        T = 1000		#milliseconds 
 
         period = [T, T, T, T, T]
         amplitude = [left_x_amp, z_amp, right_x_amp, z_amp, swing_amp]
         offset = [-20, -75, -20, -75, 0]
-        phase = [0, 90, 180, 270, 335]
+        phase = [00, 180, 270, 0, 335+90]
 
         for i in range(len(self.osc)):
             self.osc[i].period = period[i]
             self.osc[i].amplitude = amplitude[i]
             self.osc[i].phase = phase[i]
             self.osc[i].offset = offset[i]
-
-
-        while True:
+ 
+        final = time.time() +float(T*steps/1000) 
+        while time.time() < final:
             try:
                 roll_data=self.sensor.getRoll()
                 for i in range(len(self.osc)):
@@ -85,11 +87,61 @@ class Maus(object):
             except IOError:
                 self._bus = smbus.SMBus(self._i2c_bus)
 
-    #def run(self):
+
+    def walk(self, steps):
+
+        left_x_amp = 10         #millimeters
+        right_x_amp = 20        #millimeters
+        z_amp = 40              #millimeters
+        swing_amp = 100          #degrees
+        T = 2000                #milliseconds 
+
+        period = [T, T, T, T, T]
+        amplitude = [left_x_amp, z_amp, right_x_amp, z_amp, swing_amp]
+        offset = [-20, -70, -20, -70, 0]
+        phase = [0, 180, 270, 0, 0]
+
+        for i in range(len(self.osc)):
+            self.osc[i].period = period[i]
+            self.osc[i].amplitude = amplitude[i]
+            self.osc[i].phase = phase[i]
+            self.osc[i].offset = offset[i]
+
+        final = time.time() +float(T*steps/1000)
+        while time.time() < final:
+            try:
+                roll_data=self.sensor.getRoll()
+                for i in range(len(self.osc)):
+                    self.osc[i].refresh()
+
+                left_joints = self.ik.getJoints(self.osc[0].output, 0, self.osc[1].output-roll_data/7)
+                right_joints = self.ik.getJoints(self.osc[2].output, 0, self.osc[3].output+roll_data/7)
+                self.control.move(self._servo_pins[0], left_joints[0])
+                self.control.move(self._servo_pins[1], right_joints[0])
+                self.control.move(self._servo_pins[2], left_joints[1])
+                self.control.move(self._servo_pins[3], right_joints[1])
+                self.control.move(self._servo_pins[4], self.osc[4].output-0.5*roll_data)
+
+            except IOError:
+                self._bus = smbus.SMBus(self._i2c_bus)
+
+
     #def walk_backwards(self):
     #def turnLeft(self):
     #def turnRight(self):
     #def jump(self):
 
-maus = Maus(servo_trims=[-15, 8, 0, -18, 21])
-maus.run()
+    def moveJoints(self, servo0, servo1, servo2, servo3, servo4):
+        self.control.move(self._servo_pins[0], servo0)
+        self.control.move(self._servo_pins[1], servo1)
+        self.control.move(self._servo_pins[2], servo2)
+        self.control.move(self._servo_pins[3], servo3)
+        self.control.move(self._servo_pins[4], servo4)
+    #def moveCart():
+
+    def zero(self):
+        for i in range(len(self._servo_pins)):
+            self.control.move(self._servo_pins[i], 0)
+
+    def sleep(self):
+	self.control.sleep()
