@@ -93,7 +93,7 @@ class Maus(object):
         left_x_amp = 10         #millimeters
         right_x_amp = 20        #millimeters
         z_amp = 40              #millimeters
-        swing_amp = 100          #degrees
+        swing_amp = 100         #degrees
         T = 2000                #milliseconds 
 
         period = [T, T, T, T, T]
@@ -131,13 +131,31 @@ class Maus(object):
     #def turnRight(self):
     #def jump(self):
 
-    def moveJoints(self, servo0, servo1, servo2, servo3, servo4):
-        self.control.move(self._servo_pins[0], servo0)
-        self.control.move(self._servo_pins[1], servo1)
-        self.control.move(self._servo_pins[2], servo2)
-        self.control.move(self._servo_pins[3], servo3)
-        self.control.move(self._servo_pins[4], servo4)
-    #def moveCart():
+    def moveJoints(self, joint_target, execution_time=0, sample_time=18):
+        if execution_time > sample_time:
+            increment = []
+            initial_position = []
+            for i in range(len(self._servo_pins)):
+                initial_position.append(self.control.getPosition(self._servo_pins[i]))
+                increment.append(float(joint_target[i] - initial_position[i]) / (execution_time / sample_time))
+                
+            final_time = time.time()*1000 + execution_time
+
+            iteration = 1
+            while time.time()*1000 < final_time:
+                partial_time = time.time()*1000 + sample_time
+                for i in range(len(self._servo_pins)):
+                    self.control.move(self._servo_pins[i], initial_position[i] + (iteration * increment[i]))
+                    
+                iteration += 1
+                while (time.time()*1000 < partial_time):
+                    pass
+        else:
+            for i in range(len(self._servo_pins)):
+                self.control.move(self._servo_pins[i], joint_target[i])
+
+    def moveCart(self, x_left, z_left, x_right, z_right):
+        pass
 
     def zero(self):
         for i in range(len(self._servo_pins)):
