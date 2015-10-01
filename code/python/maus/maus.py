@@ -25,6 +25,7 @@ class Maus(object):
 
         self.control = ServoController(self._bus, self._pca9685_address)
         self.sensor = Inclinometer(self._bus, self._bno055_address)
+        self.sensor.trim_pitch = -14
 
         #Setting up OctoSnake
         self.osc = []
