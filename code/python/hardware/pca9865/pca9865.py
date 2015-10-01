@@ -24,7 +24,7 @@ class ServoController(object):
 
     def getPosition(self, id):
 	register_value = self._read(id)
-        return (register_value - self.servo_zero)/self.servo_inc - self.servos[id].trim 
+        return ((register_value - self.servo_zero)/self.servo_inc - self.servos[id].trim) * (-2*self.servos[id].reverse + 1)
 
     def _write(self, id, register_value):
         self.bus.write_byte_data(self.address, id*4+6, 0)
