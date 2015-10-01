@@ -6,6 +6,7 @@ from maus.maus import Maus
 import time
 
 maus = Maus(servo_trims=[-15, 8, 0, -18, 21])
+maus.walk(10)
 maus.run(30)
 #maus.zero()
 #time.sleep(2)
@@ -13,7 +14,9 @@ maus.run(30)
 #maus.sleep()
 
 maus.turnLeft(10)
-maus.walkBackwards(20)
+maus.turnRight(10)
+maus.moveJoints([45,45,-45,-45,0],3000)
+maus.walkBackwards(10)
 
 maus.zero()
 maus.moveJoints([90,90,-90,-90,0],1000)
