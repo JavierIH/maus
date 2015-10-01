@@ -6,7 +6,7 @@ from maus.maus import Maus
 import time
 
 maus = Maus(servo_trims=[-15, 8, 0, -18, 21])
-maus.walk(10)
+maus.walk(20)
 maus.run(30)
 #maus.zero()
 #time.sleep(2)

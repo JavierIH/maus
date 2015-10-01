@@ -1,6 +1,6 @@
 import time
 import smbus
-from hardware.pca9865.pca9865 import ServoController
+from hardware.pca9685.pca9685 import ServoController
 from hardware.bno055.bno055 import Inclinometer
 from control.kinematics.kinematics import MausKinematics
 import control.octosnake.octosnake as octosnake
@@ -8,14 +8,14 @@ import control.octosnake.octosnake as octosnake
 
 class Maus(object):
     
-    def __init__(self, name='maus', i2c_bus=0, servo_trims=[0, 0, 0, 0, 0], servo_pins=[8, 9, 10, 11, 4], pca9865_address=0x40, bno055_address=0x29):
+    def __init__(self, name='maus', i2c_bus=0, servo_trims=[0, 0, 0, 0, 0], servo_pins=[8, 9, 10, 11, 4], pca9685_address=0x40, bno055_address=0x29):
         
         #Configuration
         self._name = name
         self._i2c_bus = i2c_bus
         self._servo_trims = servo_trims
         self._servo_pins = servo_pins
-        self._pca9865_address = pca9865_address
+        self._pca9685_address = pca9685_address
         self._bno055_address = bno055_address
     
         #Setting up hardware
@@ -23,7 +23,7 @@ class Maus(object):
         if not self._bus:
             raise Exception('I2C bus connection failed!')
 
-        self.control = ServoController(self._bus, self._pca9865_address)
+        self.control = ServoController(self._bus, self._pca9685_address)
         self.sensor = Inclinometer(self._bus, self._bno055_address)
 
         #Setting up OctoSnake
