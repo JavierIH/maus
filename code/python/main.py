@@ -6,14 +6,20 @@ from maus.maus import Maus
 import time
 
 maus = Maus(servo_trims=[-15, 8, 0, -18, 21])
-#maus.run(1)
+maus.run(30)
 #maus.zero()
 #time.sleep(2)
-t=2000
-while True:
-    maus.moveJoints([70,70,-70,-70,0],3000)
-    maus.moveJoints([50,50,-50,-50,0],3000)
-time.sleep(1)
+#time.sleep(1)
+#maus.sleep()
+
+maus.turnLeft(10)
+maus.walkBackwards(20)
+
+maus.zero()
+maus.moveJoints([90,90,-90,-90,0],1000)
+maus.sleep()
+maus.sleep()
+maus.sleep()
 maus.sleep()
 
 print 'TA-DAAHHHHHHH!!!!!!'
