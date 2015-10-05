@@ -18,21 +18,21 @@ class Inclinometer(object):
                
         self.bus.write_byte_data(self.address, 0x3d, 0x0c) #mode ndof
 
-        self.roll_data = 0
-        self.roll_pitch = 0
-        self.roll_yaw = 0
+        self.roll_trim = 0
+        self.pitch_trim = 0
+        self.yaw_trim = 0
 
     def getPitch(self):
         out = self.bus.read_word_data(self.address, 0x1e)
-	return self.raw2deg(out) + self.pitch_data
+	return self.raw2deg(out) + self.pitch_trim
 
     def getRoll(self):
 	out = self.bus.read_word_data(self.address, 0x1c)
-	return self.raw2deg(out) + self.roll_data
+	return self.raw2deg(out) + self.roll_trim
 
     def getYaw(self):
 	out = self.bus.read_word_data(self.address, 0x1a)
-        return self.raw2deg(out) + self.yaw_data
+        return self.raw2deg(out) + self.yaw_trim
 
     def raw2deg(self, input):
 	if input > 65535/2:
