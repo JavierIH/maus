@@ -1,8 +1,6 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__).replace('examples/pca9685','')))
-
-print os.path.dirname(os.path.abspath(__file__).replace('examples/pca9685',''))
+sys.path.append(os.path.dirname(os.path.abspath(__file__).replace('examples/pca9685', '')))
 
 import smbus
 from hardware.pca9685.pca9685 import ServoController
@@ -29,6 +27,3 @@ while True:
     control.move(servo_id, -20)
     print 'Envio -20, lectura: ', control.getPosition(servo_id)
     time.sleep(3)
-
-
-
