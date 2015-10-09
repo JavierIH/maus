@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from maus.maus import Maus
 import time
 
-maus = Maus(servo_trims=[-12, 8, -3, -18, 15])#[-15, 8, 0, -18, 15])
+maus = Maus(servo_trims=[-15, 8, 0, -18, 15])
 maus.walk(500)
 maus.run(10)
 #maus.zero()
