@@ -1,11 +1,11 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__).replace('examples/pca9865','')))
+sys.path.append(os.path.dirname(os.path.abspath(__file__).replace('examples/pca9685','')))
 
-print os.path.dirname(os.path.abspath(__file__).replace('examples/pca9865',''))
+print os.path.dirname(os.path.abspath(__file__).replace('examples/pca9685',''))
 
 import smbus
-from pca9865 import ServoController
+from hardware.pca9685.pca9685 import ServoController
 import time
 
 bus = smbus.SMBus(0)
