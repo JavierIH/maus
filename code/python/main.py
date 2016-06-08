@@ -10,7 +10,7 @@ print 'yyeeyyeye'
 maus = Maus(servo_trims=[-15, 8, 0, -18, 15])
 
 print 'uouououou'
-maus.walk(300)
+maus.walk(30)#, True)
 #maus.run(10)
 #maus.turnLeft(10)
 #maus.walk(30)

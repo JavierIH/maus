@@ -51,13 +51,16 @@ class Maus(object):
         self.control.servos[self._servo_pins[3]].reverse = True
 
 
-    def walk(self, steps):
+    def walk(self, steps, write_log = False):
 
         left_x_amp = 20#20		#millimeters
         right_x_amp = 20#20	#millimeters
         z_amp = 20		#millimeters
-        swing_amp = 90		#degrees
-        T = 800                 #milliseconds 
+        swing_amp = 120		#degrees
+        T = 800                 #800 milliseconds 
+
+	if(write_log):
+		log_file = open("walk_log.txt", "w")
 
         period = [T, T, T, T, T]
         amplitude = [left_x_amp, z_amp, right_x_amp, z_amp, swing_amp]
@@ -83,11 +86,22 @@ class Maus(object):
                 self.control.move(self._servo_pins[1], right_joints[0])
                 self.control.move(self._servo_pins[2], left_joints[1])
                 self.control.move(self._servo_pins[3], right_joints[1])
-                self.control.move(self._servo_pins[4], self.osc[4].output+0.5*roll_data)
-		print(roll_data);
+                self.control.move(self._servo_pins[4], self.osc[4].output)#+0.5*roll_data)
+		print(0.5*roll_data);
+
+		if(write_log):
+			log_file.write("%f,%f,%f,%f,%f,%f," % (time.time(), left_joints[0], right_joints[0], left_joints[1], right_joints[1], self.osc[4].output+2*roll_data))
+
+			left_joints = self.ik.getJoints(self.osc[0].output, 0, self.osc[1].output)#-roll_data/7)
+                	right_joints = self.ik.getJoints(self.osc[2].output, 0, self.osc[3].output)#+roll_data/7)
+			log_file.write("%f,%f,%f,%f,%f;" % (left_joints[0], right_joints[0], left_joints[1], right_joints[1], self.osc[4].output))
+
 
             except IOError:
                 self._bus = smbus.SMBus(self._i2c_bus)
+
+	if(write_log):
+                log_file.close()
 
     def slowWalk(self, steps):
 
